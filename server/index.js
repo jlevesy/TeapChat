@@ -28,7 +28,7 @@ wsServer.on('request', (req) => {
     return;
   }
 
-  const connection = req.accept('echo-protocol', req.origin);
+  const connection = req.accept('tea-chat-protocol', req.origin);
   console.log('accepted a new connection');
 
   connection.on('message', (message) => {
@@ -39,6 +39,6 @@ wsServer.on('request', (req) => {
   });
 
   connection.on('close', (reason, desc) => {
-    console.log(`Peer #{connection.remoteAddress} disconnected.`);
+    console.log(`Peer ${connection.remoteAddress} disconnected.`);
   });
 });
