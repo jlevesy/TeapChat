@@ -36,7 +36,7 @@
   };
 
   conn.onerror = () => {
-    renderMessage('error', 'system', 'Connetion error, please refresh the page');
+    renderMessage('error', 'system', 'Connection error, please refresh the page');
   };
 
   conn.onmessage = (event) => {
@@ -45,6 +45,8 @@
     if(!eventHandlers.hasOwnProperty(eventData.type)) {
       renderMessage('error', 'system', `Unknown event type ${eventData.type}`);
     }
+
+    eventHandlers[eventData.type](eventData);
   };
 
   connectButton.addEventListener('click', (e) => {
