@@ -4,45 +4,38 @@
   margin:0px;
 }
 
-p {
-  line-height:18px;
-}
-
-h1 {
-  width:500px;
+.container {
+  width: 800px;
   margin-left:auto;
   margin-right:auto;
-}
-
-#content, #status {
   font-size: 12px;
 }
 
-div {
-  width:500px;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-#content {
-  padding:5px;
+.chat-content {
   background:#ddd;
   border-radius:5px;
   overflow-y: scroll;
   border:1px solid #CCC;
-  margin-top:10px;
-  height: 460px;
+  height: 800px;
 }
 
-#input {
+input {
   border-radius:2px;
   border:1px solid #ccc;
-  margin-top:10px; padding:5px; width:400px;
+  padding:5px;
+  margin-right: 10px;
 }
 
-#status {
-  width:88px;
-  display:block;
-  float:left;
-  margin-top:15px;
+.toolbar {
+  display: flex;
+  flex-wrap: none;
+  margin: 10px 0 10px 0;
+}
+
+.toolbar-settings > h1 {
+  flex-grow: 1;
+}
+
+.toolbar-chat > input {
+  flex-grow: 1;
 }
