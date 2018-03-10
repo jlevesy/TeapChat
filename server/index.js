@@ -28,7 +28,7 @@ wsServer.on('request', (req) => {
     return;
   }
 
-  const connection = req.accept('tea-chat-protocol', req.origin);
+  const connection = req.accept('teapchat-protocol-v1', req.origin);
   console.log('accepted a new connection');
 
   connection.on('message', (message) => {
