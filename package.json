@@ -1,0 +1,24 @@
+{
+  "name": "tea-chat",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/jlevesy/tea-chat",
+  "author": "Julien Levesy",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "finalhandler": "^1.1.1",
+    "serve-static": "^1.13.2",
+    "websocket": "^1.0.25"
+  },
+  "devDependencies": {
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "scripts": {
+    "server": "node server/index.js"
+  }
+}
