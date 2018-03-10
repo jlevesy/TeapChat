@@ -11,14 +11,6 @@
   font-size: 12px;
 }
 
-.chat-content {
-  background:#ddd;
-  border-radius:5px;
-  overflow-y: scroll;
-  border:1px solid #CCC;
-  height: 800px;
-}
-
 input {
   border-radius:2px;
   border:1px solid #ccc;
@@ -38,4 +30,23 @@ input {
 
 .toolbar-chat > input {
   flex-grow: 1;
+}
+
+.chat-content {
+  background:#ddd;
+  border-radius:5px;
+  overflow-y: scroll;
+  border:1px solid #CCC;
+  height: 800px;
+}
+
+.chat-content p {
+  line-height: 18px;
+  margin: 5px 10px;
+}
+
+.chat-content p span.from,
+.chat-content p span.to {
+  font-weight: bold;
+  margin-right: 10px;
 }
