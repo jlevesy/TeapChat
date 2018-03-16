@@ -7,11 +7,23 @@ class Producer {
   }
 
   connect(message, done) {
-    done(Event.connected());
+    this.connection.createChannel().then(
+      (channel) => {
+        this.channel = channel;
+        done(Event.connected());
+      }
+    );
   }
 
   disconnect(message, done) {
-    done(Event.disconnected());
+    if (!this.channel) {
+      done(Event.error('Already disconnected'));
+      return;
+    }
+
+    this.channel.close().then(() => {
+      done(Event.disconnected());
+    });
   }
 
   close() {

@@ -4,9 +4,12 @@ class Message {
       return null;
     }
 
+    let parsedContent = null;
+
     try {
       parsedContent = JSON.parse(wsMessage.utf8Data);
     } catch (e) {
+      console.log(`Failed to parse message, reason is #{e}`);
       return null;
     }
 
