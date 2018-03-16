@@ -1,15 +1,17 @@
+const Event = require('./event');
+
 class Producer {
   constructor(connection) {
     this.connection = connection
     this.channel = null;
   }
 
-  connect(message) {
-    return { type: 'connected' };
+  connect(message, done) {
+    done(Event.connected());
   }
 
-  disconnect(message) {
-    return { type: 'disconnected' };
+  disconnect(message, done) {
+    done(Event.disconnected());
   }
 
   close() {

@@ -1,3 +1,5 @@
+const Event = require('./event');
+
 class Session{
   constructor(client, producer, consumer) {
     this.client = client
@@ -12,11 +14,11 @@ class Session{
     }
 
     try {
-      this.client.send(
-        this.producer[message.type](message)
-      );
+        this.producer[message.type](message, (result) => {
+          this.client.send(result);
+        });
     } catch (e) {
-      this.client.send({ type: 'error', message: e.toString() });
+      this.client.send(Event.error(e.toString()));
     }
   }
 
