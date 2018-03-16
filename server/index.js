@@ -4,7 +4,7 @@ const WebsocketServer = require('websocket').server,
   http = require('http'),
   amqp = require('amqplib'),
 
-  parseMessage = require('./parser'),
+  Message = require('./message'),
   Session = require('./session'),
   Client = require('./client'),
   Producer = require('./producer'),
@@ -37,13 +37,14 @@ amqp.connect(process.env.TEAPCHAT_AMQP_URL).then(
         client = new Client(wsConnection),
         session = new Session(client, producer, consumer);
 
-      wsConnection.on('message', (message) => {
-        parsedMessage = parseMessage(message);
-        if (!parsedMessage) {
+      wsConnection.on('message', (wsMessage) => {
+        message = Message.fromWsMessage(wsMessage);
+
+        if (!message) {
           console.log('Ignored invalid message');
         }
 
-        session.handleMessage(parsedMessage);
+        session.handleMessage(message);
       });
 
       wsConnection.on('close', (reason, desc) => {
