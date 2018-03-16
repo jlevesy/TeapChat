@@ -1,0 +1,41 @@
+version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
+
+volumes:
+  rabbitmq: ~
+
+services:
+  app:
+    image: node:alpine
+    user: node
+    working_dir: /home/node/app
+    volumes:
+      - ${PWD}:/home/node/app
+    networks:
+      - dev
+    depends_on:
+      - rabbitmq
+    ports:
+      - 1337:1337
+    environment:
+      - TEAPCHAT_AMQP_URL=amqp://teapchat:teapchat@rabbitmq:5672/teapchat
+    command:
+      - yarn
+      - run
+      - server
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=teapchat
+      - RABBITMQ_DEFAULT_PASS=teapchat
+      - RABBITMQ_DEFAULT_VHOST=teapchat
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+    networks:
+      - dev
