@@ -25,15 +25,32 @@
     connectButton.innerText = connected ? 'Disconnect' : 'Connect';
   }
 
+  function handleMessageInputReturn(e) {
+    e.key == 'Enter' && handleSendMessage(e);
+  }
+
+  function handleSendMessage(e) {
+    e.preventDefault();
+    console.log('Handling input !');
+  }
+
   const eventHandlers = {
     connected: (payload) => {
       connected = true;
       updateInterface(connected);
+
+      sendBtn.addEventListener('click', handleSendMessage);
+      messageInput.addEventListener('keyup', handleMessageInputReturn);
+
       renderMessage('info', 'system', 'Connected to chat !');
     },
     disconnected: (payload) => {
       connected = false;
       updateInterface(connected);
+
+      sendBtn.removeEventListener('click', handleSendMessage);
+      messageInput.removeEventListener('keyup', handleMessageInputReturn);
+
       renderMessage('info', 'system', 'Disconnected from chat !');
     }
   };
