@@ -57,21 +57,9 @@
     e.key == 'Enter' && handleSendMessage(e);
   }
 
-  function renderSentMessage(message) {
-    switch(message.type) {
-      case 'whisper':
-        renderMessage(`You whispered to ${message.to}`, message.content);
-        break;
-      default:
-        renderMessage('You', message.content);
-    };
-  }
-
   function handleSendMessage(e) {
     e.preventDefault();
-    const message = parseRawInput(messageInput.value);
-    sendMessage(message);
-    renderSentMessage(message);
+    sendMessage(parseRawInput(messageInput.value));
     messageInput.value = '';
   }
 
@@ -93,6 +81,9 @@
       messageInput.removeEventListener('keyup', handleMessageInputReturn);
 
       renderMessage('system', 'Disconnected from chat !');
+    },
+    whispered: (payload) => {
+      renderMessage(`You whispered to ${payload.to}`, payload.content);
     }
   };
 

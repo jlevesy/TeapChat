@@ -16,13 +16,13 @@ class Message {
     }
 
     return new Message(
-      parsedContent['type'],
-      parsedContent['content'],
-      parsedContent['to']
+      parsedContent.type,
+      parsedContent.content,
+      parsedContent.to
     );
   }
 
-  constructor(type, content, to) {
+  constructor(type, content = null, to = null) {
     this.type = type;
     this.content = content;
     this.to = to;

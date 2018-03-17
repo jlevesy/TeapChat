@@ -1,5 +1,6 @@
 const EVT_CONNECTED = 'connected',
   EVT_DISCONNECTED = 'disconnected',
+  EVT_WHISPERED = 'whispered',
   EVT_ERROR = 'error';
 
 class Event {
@@ -15,9 +16,14 @@ class Event {
     return new Event(EVT_ERROR, reason);
   }
 
-  constructor(type, message) {
+  static whispered(message) {
+    return new Event(EVT_WHISPERED, message.content, message.to);
+  }
+
+  constructor(type, content = null, to = null) {
     this.type = type;
-    this.message = message;
+    this.content = content;
+    this.to = to;
   }
 }
 

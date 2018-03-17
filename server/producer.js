@@ -46,6 +46,7 @@ class Producer {
     }
 
     this.channel.sendToQueue(message.sanitizedTo(), message.asPayload());
+    done(Event.whispered(message));
   }
 
   close() {
