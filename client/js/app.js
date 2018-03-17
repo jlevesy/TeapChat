@@ -2,6 +2,8 @@
   const connectButton = document.getElementById('connect-btn'),
     usernameInput = document.getElementById('username-input'),
     mainChat = document.getElementById('main-chat'),
+    messageInput = document.getElementById('message-input'),
+    sendBtn = document.getElementById('send-btn'),
     conn = new WebSocket(`ws://${location.host}`, 'teapchat-protocol-v1');
 
   let connected = false;
@@ -16,17 +18,22 @@
     mainChat.appendChild(elt);
   }
 
+  function updateInterface(connected) {
+    usernameInput.disabled = connected;
+    messageInput.disabled = !connected;
+    sendBtn.disabled = !connected;
+    connectButton.innerText = connected ? 'Disconnect' : 'Connect';
+  }
+
   const eventHandlers = {
     connected: (payload) => {
       connected = true;
-      usernameInput.disabled = true;
-      connectButton.innerText = 'Disconnect';
+      updateInterface(connected);
       renderMessage('info', 'system', 'Connected to chat !');
     },
     disconnected: (payload) => {
       connected = false;
-      usernameInput.disabled = false;
-      connectButton.innerText = 'Connect';
+      updateInterface(connected);
       renderMessage('info', 'system', 'Disconnected from chat !');
     }
   };
