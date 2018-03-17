@@ -12,12 +12,10 @@ class Producer {
       return;
     }
 
-    this.connection.createChannel().then(
-      (channel) => {
-        this.channel = channel;
-        done(Event.connected());
-      }
-    );
+    this.connection.createChannel().then((channel) => {
+      this.channel = channel;
+      done(Event.connected());
+    });
   }
 
   disconnect(message, done) {
@@ -47,7 +45,7 @@ class Producer {
       return;
     }
 
-    console.log(message);
+    this.channel.sendToQueue(message.sanitizedTo(), message.asPayload());
   }
 
   close() {
