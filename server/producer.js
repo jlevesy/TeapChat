@@ -7,6 +7,11 @@ class Producer {
   }
 
   connect(message, done) {
+    if (this.channel) {
+      done(Event.error('Already connected'));
+      return;
+    }
+
     this.connection.createChannel().then(
       (channel) => {
         this.channel = channel;
@@ -22,6 +27,7 @@ class Producer {
     }
 
     this.channel.close().then(() => {
+      this.channel = null;
       done(Event.disconnected());
     });
   }

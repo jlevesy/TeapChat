@@ -23,37 +23,34 @@ wsServer =  new WebsocketServer({
   autoAcceptConnections: false
 });
 
-amqp.connect(process.env.TEAPCHAT_AMQP_URL).then(
-  (rmqConnection) => {
-    console.log('Connected to the broker');
+amqp.connect(process.env.TEAPCHAT_AMQP_URL).then((rmqConnection) => {
+  console.log('Connected to the broker');
 
-    wsServer.on('request', (req) => {
-      const wsConnection = req.accept('teapchat-protocol-v1', req.origin);
+  wsServer.on('request', (req) => {
+    const wsConnection = req.accept('teapchat-protocol-v1', req.origin);
 
-      console.log('accepted a new connection');
+    console.log('accepted a new connection');
 
-      const producer = new Producer(rmqConnection),
-        consumer = new Consumer(rmqConnection),
-        client = new Client(wsConnection),
-        session = new Session(client, producer, consumer);
+    const producer = new Producer(rmqConnection),
+      consumer = new Consumer(rmqConnection),
+      client = new Client(wsConnection),
+      session = new Session(client, producer, consumer);
 
-      wsConnection.on('message', (wsMessage) => {
-        message = Message.fromWsMessage(wsMessage);
+    wsConnection.on('message', (wsMessage) => {
+      message = Message.fromWsMessage(wsMessage);
 
-        if (!message) {
-          console.log('Ignored invalid message');
-        }
+      if (!message) {
+        console.log('Ignored invalid message');
+      }
 
-        session.handleMessage(message);
-      });
-
-      wsConnection.on('close', (reason, desc) => {
-        session.close();
-        console.log(`Peer ${wsConnection.remoteAddress} disconnected.`);
-      });
+      session.handleMessage(message);
     });
-  },
-  (err) => {
-    console.error('Failed to connect to the broker: %s', err);
-  }
-);
+
+    wsConnection.on('close', (reason, desc) => {
+      session.close();
+      console.log(`Peer ${wsConnection.remoteAddress} disconnected.`);
+    });
+  });
+}).catch((err) => {
+  console.error('Failed to connect to the broker: %s', err);
+});
