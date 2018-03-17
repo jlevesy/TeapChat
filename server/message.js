@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 class Message {
   static fromWsMessage(wsMessage) {
     if (wsMessage.type !== 'utf8') {
@@ -27,7 +29,11 @@ class Message {
   }
 
   sanitizedTo() {
-    return this.to;
+    return _.snakeCase(this.to);
+  }
+
+  asPayload() {
+    return new Buffer(JSON.stringify(this));
   }
 }
 
