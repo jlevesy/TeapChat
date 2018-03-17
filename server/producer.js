@@ -32,7 +32,30 @@ class Producer {
     });
   }
 
+  message(message, done) {
+    if (!this.channel) {
+      done(Event.error('Not connected !'));
+      return;
+    }
+
+    console.log(message);
+  }
+
+  whisper(message, done) {
+    if (!this.channel) {
+      done(Event.error('Not connected !'));
+      return;
+    }
+
+    console.log(message);
+  }
+
   close() {
+    if (!this.channel) {
+      return;
+    }
+
+    this.channel.close();
   }
 };
 

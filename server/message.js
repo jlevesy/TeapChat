@@ -14,12 +14,20 @@ class Message {
     }
 
     return new Message(
-      parsedContent.type
+      parsedContent['type'],
+      parsedContent['content'],
+      parsedContent['to']
     );
   }
 
-  constructor(type) {
+  constructor(type, content, to) {
     this.type = type;
+    this.content = content;
+    this.to = to;
+  }
+
+  sanitizedTo() {
+    return this.to;
   }
 }
 
