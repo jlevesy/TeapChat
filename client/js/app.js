@@ -1,5 +1,6 @@
 (function () {
-  const connectButton = document.getElementById('connect-btn'),
+  const INPUT_REGEXP = /^\/(\w+)\s+(\w+)\s+(.*)/,
+    connectButton = document.getElementById('connect-btn'),
     usernameInput = document.getElementById('username-input'),
     mainChat = document.getElementById('main-chat'),
     messageInput = document.getElementById('message-input'),
@@ -12,7 +13,7 @@
     conn.send(JSON.stringify(msg));
   }
 
-  function renderMessage(type, source, text) {
+  function renderMessage(source, text) {
     const elt = document.createElement('p');
     elt.innerHTML = `<span class="from">${source}</span>${text}`;
     mainChat.appendChild(elt);
@@ -25,13 +26,53 @@
     connectButton.innerText = connected ? 'Disconnect' : 'Connect';
   }
 
+  function parseRawInput(rawInput) {
+    const parsedInput  = INPUT_REGEXP.exec(rawInput);
+
+    if(!parsedInput) {
+      return {
+        type: 'message',
+        content: rawInput,
+      };
+    }
+
+    const [, action, arg, message] = parsedInput;
+
+    switch (action) {
+      case 'whisper':
+        return {
+          type: action,
+          to: arg,
+          content: message
+        };
+      default:
+        return {
+          type: 'message',
+          content: rawInput
+        };
+    }
+  }
+
   function handleMessageInputReturn(e) {
     e.key == 'Enter' && handleSendMessage(e);
   }
 
+  function renderSentMessage(message) {
+    switch(message.type) {
+      case 'whisper':
+        renderMessage(`You whispered to ${message.to}`, message.content);
+        break;
+      default:
+        renderMessage('You', message.content);
+    };
+  }
+
   function handleSendMessage(e) {
     e.preventDefault();
-    console.log('Handling input !');
+    const message = parseRawInput(messageInput.value);
+    sendMessage(message);
+    renderSentMessage(message);
+    messageInput.value = '';
   }
 
   const eventHandlers = {
@@ -42,7 +83,7 @@
       sendBtn.addEventListener('click', handleSendMessage);
       messageInput.addEventListener('keyup', handleMessageInputReturn);
 
-      renderMessage('info', 'system', 'Connected to chat !');
+      renderMessage('system', 'Connected to chat !');
     },
     disconnected: (payload) => {
       connected = false;
@@ -51,23 +92,23 @@
       sendBtn.removeEventListener('click', handleSendMessage);
       messageInput.removeEventListener('keyup', handleMessageInputReturn);
 
-      renderMessage('info', 'system', 'Disconnected from chat !');
+      renderMessage('system', 'Disconnected from chat !');
     }
   };
 
   conn.onopen = () => {
-    renderMessage('info', 'system', 'Connected to server !');
+    renderMessage('system', 'Connected to server !');
   };
 
   conn.onerror = () => {
-    renderMessage('error', 'system', 'Connection error, please refresh the page');
+    renderMessage('system', 'Connection error, please refresh the page');
   };
 
   conn.onmessage = (event) => {
     const eventData = JSON.parse(event.data);
 
     if(!eventHandlers.hasOwnProperty(eventData.type)) {
-      renderMessage('error', 'system', `Unknown event type ${eventData.type}`);
+      renderMessage('system', `Unknown event type ${eventData.type}`);
     }
 
     eventHandlers[eventData.type](eventData);
@@ -77,10 +118,10 @@
     e.preventDefault();
 
     if (connected) {
-      renderMessage('info', 'system', 'Disconnecting from chat...');
+      renderMessage('system', 'Disconnecting from chat...');
       sendMessage({type: 'disconnect'});
     } else {
-      renderMessage('info', 'system', 'Connecting to chat...');
+      renderMessage('system', 'Connecting to chat...');
       sendMessage({type: 'connect'});
     }
   });
