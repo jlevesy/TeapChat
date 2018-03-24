@@ -84,7 +84,10 @@
     },
     whispered: (payload) => {
       renderMessage(`You whispered to ${payload.to}`, payload.content);
-    }
+    },
+    error: (payload) => {
+      renderMessage(`Server error`, payload.content);
+    },
   };
 
   conn.onopen = () => {

@@ -17,19 +17,25 @@ class Message {
 
     return new Message(
       parsedContent.type,
-      parsedContent.content,
-      parsedContent.to
+      parsedContent.from,
+      parsedContent.to,
+      parsedContent.content
     );
   }
 
-  constructor(type, content = null, to = null) {
+  constructor(type, from = null, to = null, content = null) {
     this.type = type;
-    this.content = content;
+    this.from = from;
     this.to = to;
+    this.content = content;
   }
 
   sanitizedTo() {
     return _.snakeCase(this.to);
+  }
+
+  sanitizedFrom() {
+    return _.snakeCase(this.from);
   }
 
   asPayload() {

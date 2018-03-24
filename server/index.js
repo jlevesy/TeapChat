@@ -10,20 +10,29 @@ const WebsocketServer = require('websocket').server,
   Producer = require('./producer'),
   Consumer = require('./consumer');
 
-const fileServer = serverStatic('client', { 'index': ['index.html', 'index.html'] });
+async function run() {
+  const fileServer = serverStatic('client', { 'index': ['index.html', 'index.html'] });
 
-const server = http.createServer((req, res) => {
-  fileServer(req, res, finalhandler(req,res));
-});
+  const server = http.createServer((req, res) => {
+    fileServer(req, res, finalhandler(req,res));
+  });
 
-server.listen(1337, () => console.log('Server is listening on port 1337'));
+  server.listen(1337, () => console.log('Server is listening on port 1337'));
 
-wsServer =  new WebsocketServer({
-  httpServer: server,
-  autoAcceptConnections: false
-});
+  wsServer =  new WebsocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+  });
 
-amqp.connect(process.env.TEAPCHAT_AMQP_URL).then((rmqConnection) => {
+  let rmqConnection = null;
+
+  try {
+    rmqConnection = await amqp.connect(process.env.TEAPCHAT_AMQP_URL);
+  } catch(e) {
+    console.log('Failed to connect to the server');
+    return;
+  }
+
   console.log('Connected to the broker');
 
   wsServer.on('request', (req) => {
@@ -51,6 +60,6 @@ amqp.connect(process.env.TEAPCHAT_AMQP_URL).then((rmqConnection) => {
       console.log(`Peer ${wsConnection.remoteAddress} disconnected.`);
     });
   });
-}).catch((err) => {
-  console.error('Failed to connect to the broker: %s', err);
-});
+}
+
+run();

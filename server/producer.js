@@ -6,50 +6,46 @@ class Producer {
     this.channel = null;
   }
 
-  connect(message, done) {
+  async connect(message, done) {
     if (this.channel) {
-      done(Event.error('Already connected'));
-      return;
+      return Event.error('Already connected');
     }
 
-    this.connection.createChannel().then((channel) => {
-      this.channel = channel;
-      done(Event.connected());
-    });
+    this.channel = await this.connection.createChannel()
+
+    return Event.connected();
   }
 
-  disconnect(message, done) {
+  async disconnect(message) {
     if (!this.channel) {
-      done(Event.error('Already disconnected'));
-      return;
+      return Event.error('Already disconnected');
     }
 
-    this.channel.close().then(() => {
-      this.channel = null;
-      done(Event.disconnected());
-    });
+    await this.channel.close();
+    this.channel = null;
+
+    return Event.disconnected();
   }
 
-  message(message, done) {
+  async message(message) {
     if (!this.channel) {
-      done(Event.error('Not connected !'));
-      return;
+      return Event.error('Not connected !');
     }
 
     console.log(message);
   }
 
-  whisper(message, done) {
+  async whisper(message) {
     if (!this.channel) {
-      done(Event.error('Not connected !'));
-      return;
+      return Event.error('Not connected !');
     }
 
     this.channel.sendToQueue(message.sanitizedTo(), message.asPayload());
-    done(Event.whispered(message));
+
+    return Event.whispered(message);
   }
 
-  close() {
+  async close() {
     if (!this.channel) {
       return;
     }

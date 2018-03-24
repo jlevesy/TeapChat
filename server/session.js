@@ -7,24 +7,56 @@ class Session{
     this.consumer = consumer;
   }
 
-  handleMessage(message) {
-    if (!(message.type in this.producer)) {
-      console.log(`Unknown event type received ${message.type}`);
+  async handleMessage(message) {
+    if (!(message.type in this)) {
+      this.client.send(Event.error(`Unknown message type received ${message.type}`));
       return;
     }
 
     try {
-        this.producer[message.type](message, (result) => {
-          this.client.send(result);
-        });
+      this.client.send(await this[message.type](message));
     } catch (e) {
+      console.log(e)
       this.client.send(Event.error(e.toString()));
     }
   }
 
-  close() {
-    this.producer.close();
-    this.consumer.close();
+  async disconnect(message) {
+    const results  = await Promise.all(
+      [
+        this.producer.disconnect(message),
+        this.consumer.disconnect(message),
+      ]
+    );
+
+    const error  = results.find((e) => e.type === 'error');
+
+    if (error) {
+      return error
+    }
+
+    return Event.disconnected();
+  }
+
+  async connect(message) {
+    const results = await Promise.all(
+      [
+        this.producer.connect(message),
+        this.consumer.connect(message),
+      ]
+    );
+
+    const error  = results.find((e) => e.type === 'error');
+
+    if (error) {
+      return error
+    }
+
+    return Event.connected();
+  }
+
+  async whisper(message) {
+    return await this.producer.whisper(message);
   }
 }
 
