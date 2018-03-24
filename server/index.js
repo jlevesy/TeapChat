@@ -41,8 +41,8 @@ async function run() {
     console.log('accepted a new connection');
 
     const producer = new Producer(rmqConnection),
-      consumer = new Consumer(rmqConnection),
       client = new Client(wsConnection),
+      consumer = new Consumer(rmqConnection, client),
       session = new Session(client, producer, consumer);
 
     wsConnection.on('message', (wsMessage) => {
@@ -56,7 +56,7 @@ async function run() {
     });
 
     wsConnection.on('close', (reason, desc) => {
-      session.close();
+      session.disconnect();
       console.log(`Peer ${wsConnection.remoteAddress} disconnected.`);
     });
   });

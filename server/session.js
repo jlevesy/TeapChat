@@ -22,12 +22,19 @@ class Session{
   }
 
   async disconnect(message) {
-    const results  = await Promise.all(
-      [
-        this.producer.disconnect(message),
-        this.consumer.disconnect(message),
-      ]
-    );
+    let results = null;
+
+    try {
+      results  = await Promise.all(
+        [
+          this.producer.disconnect(message),
+          this.consumer.disconnect(message),
+        ]
+      );
+    } catch (e) {
+      console.log(e);
+      this.clent.send(Event.error(e.toString()));
+    }
 
     const error  = results.find((e) => e.type === 'error');
 
@@ -39,14 +46,22 @@ class Session{
   }
 
   async connect(message) {
-    const results = await Promise.all(
-      [
-        this.producer.connect(message),
-        this.consumer.connect(message),
-      ]
-    );
+    let results = null;
 
-    const error  = results.find((e) => e.type === 'error');
+    try {
+      results = await Promise.all(
+        [
+          this.producer.connect(message),
+          this.consumer.connect(message),
+        ]
+      );
+    }
+    catch (e) {
+      console.log(e);
+      this.client.send(Event.error(e.toString()));
+    }
+
+    const error = results.find((e) => e.type === 'error');
 
     if (error) {
       return error

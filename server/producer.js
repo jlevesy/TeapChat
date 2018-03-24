@@ -44,14 +44,6 @@ class Producer {
 
     return Event.whispered(message);
   }
-
-  async close() {
-    if (!this.channel) {
-      return;
-    }
-
-    this.channel.close();
-  }
 };
 
 module.exports = Producer;

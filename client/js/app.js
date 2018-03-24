@@ -10,6 +10,7 @@
   let connected = false;
 
   function sendMessage(msg) {
+    msg['from'] = usernameInput.value;
     conn.send(JSON.stringify(msg));
   }
 
@@ -73,6 +74,7 @@
 
       renderMessage('system', 'Connected to chat !');
     },
+
     disconnected: (payload) => {
       connected = false;
       updateInterface(connected);
@@ -82,12 +84,18 @@
 
       renderMessage('system', 'Disconnected from chat !');
     },
+
     whispered: (payload) => {
       renderMessage(`You whispered to ${payload.to}`, payload.content);
     },
+
     error: (payload) => {
       renderMessage(`Server error`, payload.content);
     },
+
+    message: (payload) => {
+      renderMessage(payload.from, payload.content);
+    }
   };
 
   conn.onopen = () => {

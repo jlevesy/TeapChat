@@ -3,8 +3,8 @@ class Client {
     this.connection = connection;
   }
 
-  send(message) {
-    this.connection.sendUTF(JSON.stringify(message));
+  send(event) {
+    this.connection.sendUTF(JSON.stringify(event));
   }
 }
 

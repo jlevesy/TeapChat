@@ -1,7 +1,9 @@
 const EVT_CONNECTED = 'connected',
   EVT_DISCONNECTED = 'disconnected',
   EVT_WHISPERED = 'whispered',
-  EVT_ERROR = 'error';
+  EVT_ERROR = 'error'
+  EVT_MESSAGE= 'message'
+;
 
 class Event {
   static connected() {
@@ -17,13 +19,27 @@ class Event {
   }
 
   static whispered(message) {
-    return new Event(EVT_WHISPERED, message.content, message.to);
+    return new Event(EVT_WHISPERED, null, message.to, message.content);
   }
 
-  constructor(type, content = null, to = null) {
+  static fromJSON(event) {
+    let parsedContent = null;
+
+    try {
+      parsedContent = JSON.parse(event);
+    } catch (e) {
+      console.log(`Failed to parse event, reason is #{e}`);
+      return null;
+    }
+
+    return new Event(EVT_MESSAGE, parsedContent.from, parsedContent.to, parsedContent.content);
+  }
+
+  constructor(type, from = null, to = null, content = null) {
     this.type = type;
-    this.content = content;
+    this.from = from;
     this.to = to;
+    this.content = content;
   }
 }
 
