@@ -9,7 +9,7 @@ class Session{
 
   async handleMessage(message) {
     if (!(message.type in this)) {
-      this.client.send(Event.error(`Unknown message type received ${message.type}`));
+      this.client.send(Event.error(`Unknown message type received "${message.type}"`));
       return;
     }
 

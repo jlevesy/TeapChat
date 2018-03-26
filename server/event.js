@@ -17,11 +17,11 @@ class Event {
   }
 
   static error(reason) {
-    return new Event(EVT_ERROR, reason);
+    return new Event(EVT_ERROR, null, null, null, reason);
   }
 
   static whispered(message) {
-    return new Event(EVT_WHISPERED, null, message.to, message.content);
+    return new Event(EVT_WHISPERED, null, message.to, null,  message.content);
   }
 
   static fromJSON(event) {
@@ -34,7 +34,7 @@ class Event {
       return null;
     }
 
-    return new Event(EVT_MESSAGE, parsedContent.from, parsedContent.to, parsedContent.content);
+    return new Event(EVT_MESSAGE, parsedContent.from, parsedContent.to, null, parsedContent.content);
   }
 
   static joined(message) {

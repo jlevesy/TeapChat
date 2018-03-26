@@ -1,5 +1,5 @@
 (function () {
-  const INPUT_REGEXP = /^\/(\w+)\s+(\w+)\s+(.*)/,
+  const INPUT_REGEXP = /^\/(\w+)\s+(\w+)\s?(.*)/,
     connectButton = document.getElementById('connect-btn'),
     usernameInput = document.getElementById('username-input'),
     mainChat = document.getElementById('main-chat'),
@@ -7,10 +7,12 @@
     sendBtn = document.getElementById('send-btn'),
     conn = new WebSocket(`ws://${location.host}`, 'teapchat-protocol-v1');
 
-  let connected = false;
+  let connected = false
+      lastJoinedChan = '';
 
   function sendMessage(msg) {
     msg['from'] = usernameInput.value;
+    msg['chan'] = lastJoinedChan;
     conn.send(JSON.stringify(msg));
   }
 
@@ -45,6 +47,12 @@
           type: action,
           to: arg,
           content: message
+        };
+      case 'join':
+      case 'leave':
+        return {
+          type: action,
+          chan: arg
         };
       default:
         return {
@@ -95,6 +103,15 @@
 
     message: (payload) => {
       renderMessage(payload.from, payload.content);
+    },
+
+    joined: (payload) => {
+      lastJoinedChan = payload.chan;
+      renderMessage('Joined', payload.chan);
+    },
+
+    left: (payload) => {
+      renderMessage('Left', payload.chan);
     }
   };
 

@@ -39,7 +39,9 @@ class Producer {
       return Event.error('Not connected !');
     }
 
-    console.log(message);
+    await this.channel.publish(TEAPCHAT_EXCHANGE, message.sanitizedChan(), message.asPayload());
+
+    return Event.joined(message);
   }
 
   async whisper(message) {

@@ -37,7 +37,7 @@ input {
   border-radius:5px;
   overflow-y: scroll;
   border:1px solid #CCC;
-  height: 800px;
+  height: 700px;
 }
 
 .chat-content p {
