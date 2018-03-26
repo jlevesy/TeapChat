@@ -1,8 +1,10 @@
 const EVT_CONNECTED = 'connected',
   EVT_DISCONNECTED = 'disconnected',
   EVT_WHISPERED = 'whispered',
-  EVT_ERROR = 'error'
-  EVT_MESSAGE= 'message'
+  EVT_ERROR = 'error',
+  EVT_MESSAGE = 'message',
+  EVT_JOINED = 'joined',
+  EVT_LEFT = 'left'
 ;
 
 class Event {
@@ -35,10 +37,19 @@ class Event {
     return new Event(EVT_MESSAGE, parsedContent.from, parsedContent.to, parsedContent.content);
   }
 
-  constructor(type, from = null, to = null, content = null) {
+  static joined(message) {
+    return new Event(EVT_JOINED, message.from, null, message.chan);
+  }
+
+  static left(message) {
+    return new Event(EVT_LEFT, message.from, null, message.chan);
+  }
+
+  constructor(type, from = null, to = null, chan = null, content = null) {
     this.type = type;
     this.from = from;
     this.to = to;
+    this.chan = chan;
     this.content = content;
   }
 }

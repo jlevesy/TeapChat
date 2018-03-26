@@ -73,6 +73,14 @@ class Session{
   async whisper(message) {
     return await this.producer.whisper(message);
   }
+
+  async join(message) {
+    return await this.producer.join(message);
+  }
+
+  async leave(message) {
+    return await this.producer.leave(message);
+  }
 }
 
 module.exports = Session;

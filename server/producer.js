@@ -1,4 +1,5 @@
-const Event = require('./event');
+const Event = require('./event')
+  TEAPCHAT_EXCHANGE = 'teapchat';
 
 class Producer {
   constructor(connection) {
@@ -12,6 +13,12 @@ class Producer {
     }
 
     this.channel = await this.connection.createChannel()
+
+    await this.channel.assertExchange(
+      TEAPCHAT_EXCHANGE,
+      'direct',
+      {durable: false, autoDelete: true}
+    );
 
     return Event.connected();
   }
@@ -43,6 +50,26 @@ class Producer {
     this.channel.sendToQueue(message.sanitizedTo(), message.asPayload());
 
     return Event.whispered(message);
+  }
+
+  async join(message) {
+    if (!this.channel) {
+      return Event.error('Not connected !');
+    }
+
+    await this.channel.bindQueue(message.sanitizedFrom(), TEAPCHAT_EXCHANGE, message.sanitizedChan());
+
+    return Event.joined(message);
+  }
+
+  async leave(message) {
+    if (!this.channel) {
+      return Event.error('Not connected !');
+    }
+
+    await this.channel.unbindQueue(message.sanitizedFrom(), TEAPCHAT_EXCHANGE, message.sanitizedChan());
+
+    return Event.left(message);
   }
 };
 

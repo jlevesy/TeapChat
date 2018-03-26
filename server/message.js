@@ -19,14 +19,16 @@ class Message {
       parsedContent.type,
       parsedContent.from,
       parsedContent.to,
+      parsedContent.chan,
       parsedContent.content
     );
   }
 
-  constructor(type, from = null, to = null, content = null) {
+  constructor(type, from = null, to = null, chan = null, content = null) {
     this.type = type;
     this.from = from;
     this.to = to;
+    this.chan = chan;
     this.content = content;
   }
 
@@ -36,6 +38,10 @@ class Message {
 
   sanitizedFrom() {
     return _.snakeCase(this.from);
+  }
+
+  sanitizedChan() {
+    return _.snakeCase(this.chan);
   }
 
   asPayload() {
