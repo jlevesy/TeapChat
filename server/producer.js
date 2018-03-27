@@ -7,7 +7,7 @@ class Producer {
     this.channel = null;
   }
 
-  async connect(message, done) {
+  async connect(command, done) {
     if (this.channel) {
       return Event.error('Already connected');
     }
@@ -23,7 +23,7 @@ class Producer {
     return Event.connected();
   }
 
-  async disconnect(message) {
+  async disconnect(command) {
     if (!this.channel) {
       return Event.error('Already disconnected');
     }
@@ -34,44 +34,44 @@ class Producer {
     return Event.disconnected();
   }
 
-  async message(message) {
+  async message(command) {
     if (!this.channel) {
       return Event.error('Not connected !');
     }
 
-    await this.channel.publish(TEAPCHAT_EXCHANGE, message.sanitizedChan(), message.asPayload());
+    await this.channel.publish(TEAPCHAT_EXCHANGE, command.sanitizedChan(), command.asPayload());
 
-    return Event.joined(message);
+    return Event.joined(command);
   }
 
-  async whisper(message) {
+  async whisper(command) {
     if (!this.channel) {
       return Event.error('Not connected !');
     }
 
-    this.channel.sendToQueue(message.sanitizedTo(), message.asPayload());
+    this.channel.sendToQueue(command.sanitizedTo(), command.asPayload());
 
-    return Event.whispered(message);
+    return Event.whispered(command);
   }
 
-  async join(message) {
+  async join(command) {
     if (!this.channel) {
       return Event.error('Not connected !');
     }
 
-    await this.channel.bindQueue(message.sanitizedFrom(), TEAPCHAT_EXCHANGE, message.sanitizedChan());
+    await this.channel.bindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedChan());
 
-    return Event.joined(message);
+    return Event.joined(command);
   }
 
-  async leave(message) {
+  async leave(command) {
     if (!this.channel) {
       return Event.error('Not connected !');
     }
 
-    await this.channel.unbindQueue(message.sanitizedFrom(), TEAPCHAT_EXCHANGE, message.sanitizedChan());
+    await this.channel.unbindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedChan());
 
-    return Event.left(message);
+    return Event.left(command);
   }
 };
 

@@ -20,8 +20,8 @@ class Event {
     return new Event(EVT_ERROR, null, null, null, reason);
   }
 
-  static whispered(message) {
-    return new Event(EVT_WHISPERED, null, message.to, null,  message.content);
+  static whispered(command) {
+    return new Event(EVT_WHISPERED, null, command.to, null,  command.content);
   }
 
   static fromJSON(event) {
@@ -37,12 +37,12 @@ class Event {
     return new Event(EVT_MESSAGE, parsedContent.from, parsedContent.to, null, parsedContent.content);
   }
 
-  static joined(message) {
-    return new Event(EVT_JOINED, message.from, null, message.chan);
+  static joined(command) {
+    return new Event(EVT_JOINED, command.from, null, command.chan);
   }
 
-  static left(message) {
-    return new Event(EVT_LEFT, message.from, null, message.chan);
+  static left(command) {
+    return new Event(EVT_LEFT, command.from, null, command.chan);
   }
 
   constructor(type, from = null, to = null, chan = null, content = null) {

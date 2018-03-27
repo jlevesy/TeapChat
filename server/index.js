@@ -4,7 +4,7 @@ const WebsocketServer = require('websocket').server,
   http = require('http'),
   amqp = require('amqplib'),
 
-  Message = require('./message'),
+  Command = require('./command'),
   Session = require('./session'),
   Client = require('./client'),
   Producer = require('./producer'),
@@ -45,14 +45,14 @@ async function run() {
       consumer = new Consumer(rmqConnection, client),
       session = new Session(client, producer, consumer);
 
-    wsConnection.on('message', (wsMessage) => {
-      message = Message.fromWsMessage(wsMessage);
+    wsConnection.on('message', (message) => {
+      command = Command.fromWs(message);
 
-      if (!message) {
-        console.log('Ignored invalid message');
+      if (!command) {
+        console.log('Ignored invalid command');
       }
 
-      session.handleMessage(message);
+      session.handleCommand(command);
     });
 
     wsConnection.on('close', (reason, desc) => {

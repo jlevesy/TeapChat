@@ -7,28 +7,28 @@ class Session{
     this.consumer = consumer;
   }
 
-  async handleMessage(message) {
-    if (!(message.type in this)) {
-      this.client.send(Event.error(`Unknown message type received "${message.type}"`));
+  async handleCommand(command) {
+    if (!(command.type in this)) {
+      this.client.send(Event.error(`Unknown command type received "${command.type}"`));
       return;
     }
 
     try {
-      this.client.send(await this[message.type](message));
+      this.client.send(await this[command.type](command));
     } catch (e) {
       console.log(e)
       this.client.send(Event.error(e.toString()));
     }
   }
 
-  async disconnect(message) {
+  async disconnect(command) {
     let results = null;
 
     try {
       results  = await Promise.all(
         [
-          this.producer.disconnect(message),
-          this.consumer.disconnect(message),
+          this.producer.disconnect(command),
+          this.consumer.disconnect(command),
         ]
       );
     } catch (e) {
@@ -45,14 +45,14 @@ class Session{
     return Event.disconnected();
   }
 
-  async connect(message) {
+  async connect(command) {
     let results = null;
 
     try {
       results = await Promise.all(
         [
-          this.producer.connect(message),
-          this.consumer.connect(message),
+          this.producer.connect(command),
+          this.consumer.connect(command),
         ]
       );
     }
@@ -70,16 +70,16 @@ class Session{
     return Event.connected();
   }
 
-  async whisper(message) {
-    return await this.producer.whisper(message);
+  async whisper(command) {
+    return await this.producer.whisper(command);
   }
 
-  async join(message) {
-    return await this.producer.join(message);
+  async join(command) {
+    return await this.producer.join(command);
   }
 
-  async leave(message) {
-    return await this.producer.leave(message);
+  async leave(command) {
+    return await this.producer.leave(command);
   }
 }
 

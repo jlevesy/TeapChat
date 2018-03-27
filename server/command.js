@@ -1,21 +1,21 @@
 const _ = require('lodash');
 
-class Message {
-  static fromWsMessage(wsMessage) {
-    if (wsMessage.type !== 'utf8') {
+class Command {
+  static fromWs(message) {
+    if (message.type !== 'utf8') {
       return null;
     }
 
     let parsedContent = null;
 
     try {
-      parsedContent = JSON.parse(wsMessage.utf8Data);
+      parsedContent = JSON.parse(message.utf8Data);
     } catch (e) {
-      console.log(`Failed to parse message, reason is #{e}`);
+      console.log(`Failed to parse command, reason is #{e}`);
       return null;
     }
 
-    return new Message(
+    return new Command(
       parsedContent.type,
       parsedContent.from,
       parsedContent.to,
@@ -49,4 +49,4 @@ class Message {
   }
 }
 
-module.exports = Message
+module.exports = Command

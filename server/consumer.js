@@ -7,15 +7,15 @@ class Consumer {
     this.channel = null;
   }
 
-  async connect(message) {
+  async connect(command) {
     if (this.channel) {
       return Event.error('Already connected');
     }
 
     this.channel = await this.connection.createChannel();
 
-    await this.channel.assertQueue(message.sanitizedFrom(), {durable: false, autoDelete: true});
-    await this.channel.consume(message.sanitizedFrom(), (message) => {
+    await this.channel.assertQueue(command.sanitizedFrom(), {durable: false, autoDelete: true});
+    await this.channel.consume(command.sanitizedFrom(), (message) => {
       const event = Event.fromJSON(message.content.toString());
 
       if (!event) {
@@ -30,7 +30,7 @@ class Consumer {
     return Event.connected();
   }
 
-  async disconnect(message) {
+  async disconnect(command) {
     if (!this.channel) {
       return Event.error('Already disconnected');
     }
