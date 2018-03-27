@@ -70,6 +70,10 @@ class Session{
     return Event.connected();
   }
 
+  async message(command) {
+    return await this.producer.message(command);
+  }
+
   async whisper(command) {
     return await this.producer.whisper(command);
   }
