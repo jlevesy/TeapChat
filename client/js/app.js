@@ -10,10 +10,10 @@
   let connected = false
       lastJoinedChan = '';
 
-  function sendMessage(msg) {
-    msg['from'] = usernameInput.value;
-    msg['chan'] = lastJoinedChan;
-    conn.send(JSON.stringify(msg));
+  function sendCommand(command) {
+    command['from'] = usernameInput.value;
+    command['chan'] = lastJoinedChan;
+    conn.send(JSON.stringify(command));
   }
 
   function renderMessage(source, text) {
@@ -68,7 +68,7 @@
 
   function handleSendMessage(e) {
     e.preventDefault();
-    sendMessage(parseRawInput(messageInput.value));
+    sendCommand(parseRawInput(messageInput.value));
     messageInput.value = '';
   }
 
@@ -138,10 +138,10 @@
 
     if (connected) {
       renderMessage('system', 'Disconnecting from chat...');
-      sendMessage({type: 'disconnect'});
+      sendCommand({type: 'disconnect'});
     } else {
       renderMessage('system', 'Connecting to chat...');
-      sendMessage({type: 'connect'});
+      sendCommand({type: 'connect'});
     }
   });
 })();
