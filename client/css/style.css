@@ -5,17 +5,29 @@
 }
 
 .container {
-  width: 800px;
+  padding: 0 10px;
   margin-left:auto;
   margin-right:auto;
   font-size: 12px;
 }
 
 input {
-  border-radius:2px;
   border:1px solid #ccc;
   padding:5px;
   margin-right: 10px;
+}
+
+.chat-view {
+  display: flex;
+  flex-wrap: none;
+}
+
+.chat-view .room-list {
+  width: 200px;
+}
+
+.chat-view .chat-content {
+  flex-grow: 1;
 }
 
 .toolbar {
@@ -34,7 +46,6 @@ input {
 
 .chat-content {
   background:#ddd;
-  border-radius:5px;
   overflow-y: scroll;
   border:1px solid #CCC;
   height: 700px;
