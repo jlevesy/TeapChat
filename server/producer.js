@@ -41,7 +41,7 @@ class Producer {
 
     await this.channel.publish(TEAPCHAT_EXCHANGE, command.sanitizedChan(), command.asPayload());
 
-    return Event.joined(command);
+    return Event.messaged(command);
   }
 
   async whisper(command) {

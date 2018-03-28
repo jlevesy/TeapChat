@@ -3,6 +3,7 @@ const EVT_CONNECTED = 'connected',
   EVT_WHISPERED = 'whispered',
   EVT_ERROR = 'error',
   EVT_MESSAGE = 'message',
+  EVT_MESSAGED = 'messaged',
   EVT_JOINED = 'joined',
   EVT_LEFT = 'left'
 ;
@@ -18,6 +19,10 @@ class Event {
 
   static error(reason) {
     return new Event(EVT_ERROR, null, null, null, reason);
+  }
+
+  static messaged(command) {
+    return new Event(EVT_MESSAGED)
   }
 
   static whispered(command) {

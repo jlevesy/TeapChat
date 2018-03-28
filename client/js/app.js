@@ -12,7 +12,6 @@
 
   function sendCommand(command) {
     command['from'] = usernameInput.value;
-    command['chan'] = lastJoinedChan;
     conn.send(JSON.stringify(command));
   }
 
@@ -36,6 +35,7 @@
       return {
         type: 'message',
         content: rawInput,
+        chan: lastJoinedChan
       };
     }
 
@@ -57,7 +57,8 @@
       default:
         return {
           type: 'message',
-          content: rawInput
+          content: rawInput,
+          chan: lastJoinedChan
         };
     }
   }
@@ -112,7 +113,9 @@
 
     left: (payload) => {
       renderMessage('Left', payload.chan);
-    }
+    },
+
+    messaged: (payload) => {}
   };
 
   conn.onopen = () => {
