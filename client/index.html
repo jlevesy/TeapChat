@@ -6,26 +6,29 @@
      <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
   <body>
-    <div class="container">
-      <div class="toolbar toolbar-settings">
-        <h1>TeapChat</h1>
-        <input type="text" id="username-input" value="User"/>
-        <button id="connect-btn">
-          Connect
-        </button>
-      </div>
-      <div class="chat-view">
-        <div id="room-list" class="room-list">
-          HELLO THERE
-        </div>
+    <header class="toolbar toolbar-settings">
+      <h1>TeapChat</h1>
+      <input type="text" id="username-input" value="User"/>
+      <button id="connect-btn">
+        Connect
+      </button>
+    </header>
+    <div class="chat-view">
+      <ul id="room-list" class="room-list">
+        <li class="system">System</li>
+        <li class="system">Dev</li>
+        <li class="system">Random</li>
+        <li class="system">Bar</li>
+      </ul>
+      <div class="chat">
         <div id="main-chat" class="chat-content">
         </div>
-      </div>
-      <div class="toolbar toolbar-chat">
-        <input type="text" id="message-input" disabled="true"/>
-        <button id="send-btn" disabled="true">
-          Send
-        </button>
+        <div class="toolbar toolbar-chat">
+          <input type="text" id="message-input" disabled="true"/>
+          <button id="send-btn" disabled="true">
+            Send
+          </button>
+        </div>
       </div>
     </div>
     <script src="js/app.js"></script>
