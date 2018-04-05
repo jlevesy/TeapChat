@@ -17,7 +17,7 @@ class Producer {
     await this.channel.assertExchange(
       TEAPCHAT_EXCHANGE,
       'direct',
-      {durable: false, autoDelete: true}
+      {durable: false}
     );
 
     return Event.connected();
