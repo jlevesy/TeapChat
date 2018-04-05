@@ -39,7 +39,7 @@ class Producer {
       return Event.error('Not connected !');
     }
 
-    await this.channel.publish(TEAPCHAT_EXCHANGE, command.sanitizedChan(), command.asPayload());
+    await this.channel.publish(TEAPCHAT_EXCHANGE, command.sanitizedRoom(), command.asPayload());
 
     return Event.messaged(command);
   }

@@ -4,11 +4,30 @@
     usernameInput = document.getElementById('username-input'),
     mainChat = document.getElementById('main-chat'),
     messageInput = document.getElementById('message-input'),
+    roomList = document.getElementById('room-list'),
     sendBtn = document.getElementById('send-btn'),
     conn = new WebSocket(`ws://${location.host}`, 'teapchat-protocol-v1');
 
   let connected = false
       lastJoinedChan = '';
+
+  function addRoom(roomName) {
+    const elt = document.createElement('li');
+    elt.id = roomName.toLowerCase();
+    elt.innerText= roomName;
+    elt.dataset.room = `room-${roomName.toLowerCase()}`;
+    roomList.appendChild(elt);
+  }
+
+  function removeRoom(roomName) {
+    const elt = document.getElementById(roomName.toLowerCase());
+    if (!elt) {
+      // TODO ?
+      return;
+    }
+
+    roomList.removeChild(elt);
+  }
 
   function sendCommand(command) {
     command['from'] = usernameInput.value;
