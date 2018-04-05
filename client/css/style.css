@@ -19,7 +19,6 @@ input {
 .chat-view {
   margin: 0 10px;
   display: flex;
-  flex-wrap: none;
 }
 
 .chat-view .room-list {
@@ -27,7 +26,7 @@ input {
 }
 
 .chat-view .room-list li {
-  list-style: unstyled;
+  list-style: none;
 }
 
 .chat-view .chat {
@@ -36,17 +35,37 @@ input {
 
 .toolbar {
   display: flex;
-  flex-wrap: none;
 }
 
 .toolbar-settings > h1 {
   flex-grow: 1;
+}
+
+.toolbar-settings {
   margin: 10px;
+}
+
+.toolbar-chat {
+  margin-top: 10px;
 }
 
 .toolbar-chat > input {
   flex-grow: 1;
-  margin-top: 10px;
+}
+
+.room-list {
+  margin-right: 10px;
+  padding: 10px;
+  background:#ddd;
+  border:1px solid #CCC;
+}
+
+.room-list > li {
+  cursor: pointer;
+}
+
+.room-list > li.current {
+  font-weight: bold;
 }
 
 .chat-content {
@@ -54,11 +73,11 @@ input {
   overflow-y: scroll;
   border:1px solid #CCC;
   height: 700px;
+  padding: 10px;
 }
 
 .chat-content p {
   line-height: 18px;
-  margin: 5px 10px;
 }
 
 .chat-content p span.from,
