@@ -19,16 +19,16 @@ class Command {
       parsedContent.type,
       parsedContent.from,
       parsedContent.to,
-      parsedContent.chan,
+      parsedContent.room,
       parsedContent.content
     );
   }
 
-  constructor(type, from = null, to = null, chan = null, content = null) {
+  constructor(type, from = null, to = null, room = null, content = null) {
     this.type = type;
     this.from = from;
     this.to = to;
-    this.chan = chan;
+    this.room = room;
     this.content = content;
   }
 
@@ -40,8 +40,8 @@ class Command {
     return _.snakeCase(this.from);
   }
 
-  sanitizedChan() {
-    return _.snakeCase(this.chan);
+  sanitizedRoom() {
+    return _.snakeCase(this.room);
   }
 
   asPayload() {

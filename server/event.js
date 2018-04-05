@@ -43,18 +43,18 @@ class Event {
   }
 
   static joined(command) {
-    return new Event(EVT_JOINED, command.from, null, command.chan);
+    return new Event(EVT_JOINED, command.from, null, command.room);
   }
 
   static left(command) {
-    return new Event(EVT_LEFT, command.from, null, command.chan);
+    return new Event(EVT_LEFT, command.from, null, command.room);
   }
 
-  constructor(type, from = null, to = null, chan = null, content = null) {
+  constructor(type, from = null, to = null, room = null, content = null) {
     this.type = type;
     this.from = from;
     this.to = to;
-    this.chan = chan;
+    this.room = room;
     this.content = content;
   }
 }

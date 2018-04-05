@@ -59,7 +59,7 @@ class Producer {
       return Event.error('Not connected !');
     }
 
-    await this.channel.bindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedChan());
+    await this.channel.bindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedRoom());
 
     return Event.joined(command);
   }
@@ -69,7 +69,7 @@ class Producer {
       return Event.error('Not connected !');
     }
 
-    await this.channel.unbindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedChan());
+    await this.channel.unbindQueue(command.sanitizedFrom(), TEAPCHAT_EXCHANGE, command.sanitizedRoom());
 
     return Event.left(command);
   }

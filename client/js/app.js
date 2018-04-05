@@ -35,7 +35,7 @@
       return {
         type: 'message',
         content: rawInput,
-        chan: lastJoinedChan
+        room: lastJoinedChan
       };
     }
 
@@ -52,13 +52,13 @@
       case 'leave':
         return {
           type: action,
-          chan: arg
+          room: arg
         };
       default:
         return {
           type: 'message',
           content: rawInput,
-          chan: lastJoinedChan
+          room: lastJoinedChan
         };
     }
   }
@@ -107,12 +107,13 @@
     },
 
     joined: (payload) => {
-      lastJoinedChan = payload.chan;
-      renderMessage('Joined', payload.chan);
+      addRoom(payload.room);
+      renderMessage('Joined', payload.room);
     },
 
     left: (payload) => {
-      renderMessage('Left', payload.chan);
+      removeRoom(payload.room);
+      renderMessage('Left', payload.room);
     },
 
     messaged: (payload) => {}
